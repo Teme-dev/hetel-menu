@@ -9,7 +9,7 @@ import { Cart } from './components/Cart/Cart';
 import { AdminLogin } from './components/Admin/AdminLogin';
 import { AdminDashboard } from './components/Admin/AdminDashboard';
 import { MenuItem } from './types';
-import { loadMenuItems, loadCategories, loadOrders, loadAdmins, saveMenuItems, saveCategories, saveOrders, saveAdmins } from './utils/storage';
+import { loadMenuItems, loadCategories, loadOrders, loadAdmins, loadReviews, saveMenuItems, saveCategories, saveOrders, saveAdmins, saveReviews } from './utils/storage';
 import { initialMenuItems, initialCategories, initialAdmins } from './data/initialData';
 
 function AppContent() {
@@ -25,6 +25,7 @@ function AppContent() {
     const categories = loadCategories();
     const orders = loadOrders();
     const admins = loadAdmins();
+    const reviews = loadReviews();
 
     // Initialize with default data if empty
     const initializedMenuItems = menuItems.length > 0 ? menuItems : initialMenuItems;
@@ -42,6 +43,7 @@ function AppContent() {
         menuItems: initializedMenuItems,
         categories: initializedCategories,
         orders,
+        reviews,
       },
     });
   }, [dispatch]);
@@ -58,6 +60,10 @@ function AppContent() {
   useEffect(() => {
     saveOrders(state.orders);
   }, [state.orders]);
+
+  useEffect(() => {
+    saveReviews(state.reviews);
+  }, [state.reviews]);
 
   const handleAddToCart = (item: MenuItem, quantity: number, notes?: string) => {
     dispatch({ type: 'ADD_TO_CART', payload: { item, quantity, notes } });

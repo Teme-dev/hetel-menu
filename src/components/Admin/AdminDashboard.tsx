@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { LogOut, Menu, Users, ShoppingBag, Plus, Settings } from 'lucide-react';
+import { LogOut, Menu, Users, ShoppingBag, Plus, Settings, BarChart3, MessageSquare } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { MenuManagement } from './MenuManagement';
 import { OrderManagement } from './OrderManagement';
 import { CategoryManagement } from './CategoryManagement';
+import { AnalyticsDashboard } from './AnalyticsDashboard';
+import { ReviewsManagement } from './ReviewsManagement';
 
 export function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<'menu' | 'orders' | 'categories'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'menu' | 'categories' | 'analytics' | 'reviews'>('orders');
   const { state, dispatch } = useApp();
 
   const handleLogout = () => {
@@ -17,6 +19,10 @@ export function AdminDashboard() {
     { id: 'orders' as const, name: 'Orders', icon: ShoppingBag, count: state.orders.filter(o => o.status !== 'completed').length },
     { id: 'menu' as const, name: 'Menu', icon: Menu, count: state.menuItems.length },
     { id: 'categories' as const, name: 'Categories', icon: Settings, count: state.categories.length },
+    ...(state.currentAdmin?.role === 'admin' ? [
+      { id: 'analytics' as const, name: 'Analytics', icon: BarChart3, count: 0 },
+      { id: 'reviews' as const, name: 'Reviews', icon: MessageSquare, count: state.reviews.length },
+    ] : []),
   ];
 
   return (
@@ -73,6 +79,8 @@ export function AdminDashboard() {
           {activeTab === 'orders' && <OrderManagement />}
           {activeTab === 'menu' && <MenuManagement />}
           {activeTab === 'categories' && <CategoryManagement />}
+          {activeTab === 'analytics' && state.currentAdmin?.role === 'admin' && <AnalyticsDashboard />}
+          {activeTab === 'reviews' && state.currentAdmin?.role === 'admin' && <ReviewsManagement />}
         </div>
       </div>
     </div>

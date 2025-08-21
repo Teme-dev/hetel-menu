@@ -203,11 +203,13 @@ export const initialAdmins: Admin[] = [
     username: 'admin',
     password: 'admin123',
     name: 'Hotel Manager',
+    role: 'admin',
   },
   {
     id: '2',
     username: 'chef',
     password: 'chef123',
     name: 'Head Chef',
+    role: 'chef',
   },
 ];

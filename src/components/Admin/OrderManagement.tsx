@@ -1,13 +1,22 @@
 import React from 'react';
-import { Clock, MapPin, Phone, CheckCircle, AlertCircle } from 'lucide-react';
+import { Clock, MapPin, Phone, CheckCircle, AlertCircle, Star } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { Order } from '../../types';
+import { OrderReviewModal } from '../Cart/OrderReviewModal';
 
 export function OrderManagement() {
   const { state, dispatch } = useApp();
+  const [showReviewModal, setShowReviewModal] = React.useState<string | null>(null);
 
   const updateOrderStatus = (orderId: string, status: Order['status']) => {
     dispatch({ type: 'UPDATE_ORDER_STATUS', payload: { id: orderId, status } });
+    
+    // Show review modal when order is completed
+    if (status === 'completed') {
+      setTimeout(() => {
+        setShowReviewModal(orderId);
+      }, 1000);
+    }
   };
 
   const getStatusColor = (status: Order['status']) => {
@@ -129,6 +138,13 @@ export function OrderManagement() {
                           Complete Order
                         </button>
                       )}
+                      <button
+                        onClick={() => setShowReviewModal(order.id)}
+                        className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors flex items-center"
+                      >
+                        <Star className="h-4 w-4 mr-2" />
+                        Request Review
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -164,6 +180,12 @@ export function OrderManagement() {
           )}
         </div>
       )}
+      
+      <OrderReviewModal
+        isOpen={!!showReviewModal}
+        onClose={() => setShowReviewModal(null)}
+        orderId={showReviewModal || ''}
+      />
     </div>
   );
 }

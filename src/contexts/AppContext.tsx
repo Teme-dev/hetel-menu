@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { MenuItem, Category, CartItem, Order, Admin } from '../types';
+import { MenuItem, Category, CartItem, Order, Admin, Review } from '../types';
 
 interface AppState {
   menuItems: MenuItem[];
   categories: Category[];
   cartItems: CartItem[];
   orders: Order[];
+  reviews: Review[];
   currentAdmin: Admin | null;
   isAdminMode: boolean;
 }
@@ -25,6 +26,7 @@ type AppAction =
   | { type: 'CLEAR_CART' }
   | { type: 'PLACE_ORDER'; payload: Order }
   | { type: 'UPDATE_ORDER_STATUS'; payload: { id: string; status: Order['status'] } }
+  | { type: 'ADD_REVIEW'; payload: Review }
   | { type: 'LOAD_DATA'; payload: Partial<AppState> };
 
 const initialState: AppState = {
@@ -32,6 +34,7 @@ const initialState: AppState = {
   categories: [],
   cartItems: [],
   orders: [],
+  reviews: [],
   currentAdmin: null,
   isAdminMode: false,
 };
@@ -137,6 +140,11 @@ function appReducer(state: AppState, action: AppAction): AppState {
             ? { ...order, status: action.payload.status }
             : order
         ),
+      };
+    case 'ADD_REVIEW':
+      return {
+        ...state,
+        reviews: [...state.reviews, action.payload],
       };
     case 'LOAD_DATA':
       return {

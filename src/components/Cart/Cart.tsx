@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Minus, Plus, ShoppingBag, MapPin, Phone } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { Order } from '../../types';
+import { OrderReviewModal } from './OrderReviewModal';
 
 interface CartProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ export function Cart({ isOpen, onClose }: CartProps) {
     contactInfo: '',
   });
   const [showOrderForm, setShowOrderForm] = useState(false);
+  const [completedOrderId, setCompletedOrderId] = useState<string | null>(null);
 
   const total = state.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const totalPrepTime = Math.max(...state.cartItems.map(item => item.prepTime));
@@ -44,10 +46,19 @@ export function Cart({ isOpen, onClose }: CartProps) {
     dispatch({ type: 'PLACE_ORDER', payload: order });
     setCustomerInfo({ tableNumber: '', roomNumber: '', contactInfo: '' });
     setShowOrderForm(false);
-    onClose();
     
     // Show success message
     alert('Order placed successfully! You will receive updates on the status.');
+    
+    // Check if order is completed to show review modal
+    setTimeout(() => {
+      const updatedOrder = state.orders.find(o => o.id === order.id);
+      if (updatedOrder?.status === 'completed') {
+        setCompletedOrderId(order.id);
+      }
+    }, 1000);
+    
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -193,6 +204,12 @@ export function Cart({ isOpen, onClose }: CartProps) {
           </div>
         )}
       </div>
+      
+      <OrderReviewModal
+        isOpen={!!completedOrderId}
+        onClose={() => setCompletedOrderId(null)}
+        orderId={completedOrderId || ''}
+      />
     </div>
   );
 }

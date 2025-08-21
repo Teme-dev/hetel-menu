@@ -1,10 +1,11 @@
-import { MenuItem, Category, Order, Admin } from '../types';
+import { MenuItem, Category, Order, Admin, Review } from '../types';
 
 const STORAGE_KEYS = {
   MENU_ITEMS: 'hotel_menu_items',
   CATEGORIES: 'hotel_categories',
   ORDERS: 'hotel_orders',
   ADMINS: 'hotel_admins',
+  REVIEWS: 'hotel_reviews',
 };
 
 export function saveToStorage<T>(key: string, data: T): void {
@@ -55,4 +56,12 @@ export function saveAdmins(admins: Admin[]): void {
 
 export function loadAdmins(): Admin[] {
   return loadFromStorage<Admin[]>(STORAGE_KEYS.ADMINS, []);
+}
+
+export function saveReviews(reviews: Review[]): void {
+  saveToStorage(STORAGE_KEYS.REVIEWS, reviews);
+}
+
+export function loadReviews(): Review[] {
+  return loadFromStorage<Review[]>(STORAGE_KEYS.REVIEWS, []);
 }

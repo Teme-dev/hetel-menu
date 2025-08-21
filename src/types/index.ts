@@ -43,4 +43,18 @@ export interface Admin {
   username: string;
   password: string;
   name: string;
+  role: 'admin' | 'chef';
+}
+
+export interface Review {
+  id: string;
+  orderId: string;
+  menuItemId: string;
+  rating: number; // 1-5 stars
+  comment: string;
+  customerInfo: {
+    tableNumber?: string;
+    roomNumber?: string;
+  };
+  createdAt: Date;
 }
