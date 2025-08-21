@@ -1,5 +1,6 @@
 import React from 'react';
 import { Category } from '../../types';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface CategoryFilterProps {
   categories: Category[];
@@ -8,6 +9,8 @@ interface CategoryFilterProps {
 }
 
 export function CategoryFilter({ categories, activeCategory, onCategoryChange }: CategoryFilterProps) {
+  const { t } = useLanguage();
+  
   return (
     <div className="flex flex-wrap gap-2 mb-8">
       <button
@@ -18,7 +21,7 @@ export function CategoryFilter({ categories, activeCategory, onCategoryChange }:
             : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
         }`}
       >
-        All Items
+        {t('main.allItems')}
       </button>
       {categories
         .sort((a, b) => a.sortOrder - b.sortOrder)

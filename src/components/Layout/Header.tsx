@@ -1,6 +1,8 @@
 import React from 'react';
 import { ShoppingCart, User, Utensils } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { LanguageToggle } from '../LanguageToggle';
 
 interface HeaderProps {
   onCartClick: () => void;
@@ -9,6 +11,7 @@ interface HeaderProps {
 
 export function Header({ onCartClick, onAdminClick }: HeaderProps) {
   const { state } = useApp();
+  const { t } = useLanguage();
   const cartItemsCount = state.cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
@@ -17,10 +20,12 @@ export function Header({ onCartClick, onAdminClick }: HeaderProps) {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
             <Utensils className="h-8 w-8 text-amber-600" />
-            <h1 className="text-2xl font-bold text-gray-900">Grand Hotel</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{t('header.title')}</h1>
           </div>
           
           <div className="flex items-center space-x-4">
+            <LanguageToggle />
+            
             {!state.isAdminMode && (
               <button
                 onClick={onCartClick}
@@ -41,7 +46,7 @@ export function Header({ onCartClick, onAdminClick }: HeaderProps) {
             >
               <User className="h-5 w-5" />
               <span className="hidden sm:inline">
-                {state.currentAdmin ? `Welcome, ${state.currentAdmin.name}` : 'Admin'}
+                {state.currentAdmin ? `${t('header.welcome')}, ${state.currentAdmin.name}` : t('header.admin')}
               </span>
             </button>
           </div>

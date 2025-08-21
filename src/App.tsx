@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppProvider, useApp } from './contexts/AppContext';
+import { LanguageProvider } from './contexts/LanguageContext';
+import { useLanguage } from './contexts/LanguageContext';
 import { Header } from './components/Layout/Header';
 import { CategoryFilter } from './components/Menu/CategoryFilter';
 import { SearchBar } from './components/Menu/SearchBar';
@@ -14,6 +16,7 @@ import { initialMenuItems, initialCategories, initialAdmins } from './data/initi
 
 function AppContent() {
   const { state, dispatch } = useApp();
+  const { t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCart, setShowCart] = useState(false);
@@ -96,17 +99,17 @@ function AppContent() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Welcome to Grand Hotel
+            {t('main.title')}
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Discover our exquisite collection of culinary delights, crafted with passion and served with elegance
+            {t('main.subtitle')}
           </p>
         </div>
 
         <RecommendedSection menuItems={state.menuItems} onAddToCart={handleAddToCart} />
 
         <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Our Menu</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">{t('main.menu')}</h2>
           
           <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
           
@@ -128,9 +131,11 @@ function AppContent() {
 
 function App() {
   return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
+    <LanguageProvider>
+      <AppProvider>
+        <AppContent />
+      </AppProvider>
+    </LanguageProvider>
   );
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface SearchBarProps {
   searchTerm: string;
@@ -7,6 +8,8 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ searchTerm, onSearchChange }: SearchBarProps) {
+  const { t } = useLanguage();
+  
   return (
     <div className="relative max-w-md mx-auto mb-8">
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -16,7 +19,7 @@ export function SearchBar({ searchTerm, onSearchChange }: SearchBarProps) {
         type="text"
         value={searchTerm}
         onChange={(e) => onSearchChange(e.target.value)}
-        placeholder="Search menu items..."
+        placeholder={t('main.search')}
         className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
       />
     </div>

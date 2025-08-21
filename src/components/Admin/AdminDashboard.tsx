@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { LogOut, Menu, Users, ShoppingBag, Plus, Settings, BarChart3, MessageSquare } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { MenuManagement } from './MenuManagement';
 import { OrderManagement } from './OrderManagement';
 import { CategoryManagement } from './CategoryManagement';
@@ -8,6 +9,7 @@ import { AnalyticsDashboard } from './AnalyticsDashboard';
 import { ReviewsManagement } from './ReviewsManagement';
 
 export function AdminDashboard() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'orders' | 'menu' | 'categories' | 'analytics' | 'reviews'>('orders');
   const { state, dispatch } = useApp();
 
@@ -16,12 +18,12 @@ export function AdminDashboard() {
   };
 
   const tabs = [
-    { id: 'orders' as const, name: 'Orders', icon: ShoppingBag, count: state.orders.filter(o => o.status !== 'completed').length },
-    { id: 'menu' as const, name: 'Menu', icon: Menu, count: state.menuItems.length },
-    { id: 'categories' as const, name: 'Categories', icon: Settings, count: state.categories.length },
+    { id: 'orders' as const, name: t('admin.orders'), icon: ShoppingBag, count: state.orders.filter(o => o.status !== 'completed').length },
+    { id: 'menu' as const, name: t('admin.menu'), icon: Menu, count: state.menuItems.length },
+    { id: 'categories' as const, name: t('admin.categories'), icon: Settings, count: state.categories.length },
     ...(state.currentAdmin?.role === 'admin' ? [
-      { id: 'analytics' as const, name: 'Analytics', icon: BarChart3, count: 0 },
-      { id: 'reviews' as const, name: 'Reviews', icon: MessageSquare, count: state.reviews.length },
+      { id: 'analytics' as const, name: t('admin.analytics'), icon: BarChart3, count: 0 },
+      { id: 'reviews' as const, name: t('admin.reviews'), icon: MessageSquare, count: state.reviews.length },
     ] : []),
   ];
 
@@ -33,8 +35,8 @@ export function AdminDashboard() {
             <div className="flex items-center space-x-4">
               <Users className="h-8 w-8 text-amber-600" />
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
-                <p className="text-sm text-gray-600">Welcome back, {state.currentAdmin?.name}</p>
+                <h1 className="text-xl font-bold text-gray-900">{t('admin.dashboard')}</h1>
+                <p className="text-sm text-gray-600">{t('admin.welcomeBack')}, {state.currentAdmin?.name}</p>
               </div>
             </div>
             <button
@@ -42,7 +44,7 @@ export function AdminDashboard() {
               className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
               <LogOut className="h-5 w-5" />
-              <span>Logout</span>
+              <span>{t('admin.logout')}</span>
             </button>
           </div>
         </div>

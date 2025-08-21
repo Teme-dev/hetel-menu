@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Star } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { Review } from '../../types';
 
 interface OrderReviewModalProps {
@@ -11,6 +12,7 @@ interface OrderReviewModalProps {
 
 export function OrderReviewModal({ isOpen, onClose, orderId }: OrderReviewModalProps) {
   const { state, dispatch } = useApp();
+  const { t } = useLanguage();
   const [reviews, setReviews] = useState<{ [itemId: string]: { rating: number; comment: string } }>({});
 
   const order = state.orders.find(o => o.id === orderId);
@@ -79,7 +81,7 @@ export function OrderReviewModal({ isOpen, onClose, orderId }: OrderReviewModalP
       <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full m-4 max-h-[90vh] overflow-hidden">
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900">Rate Your Experience</h2>
+            <h2 className="text-2xl font-bold text-gray-900">{t('review.title')}</h2>
             <button
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -87,7 +89,7 @@ export function OrderReviewModal({ isOpen, onClose, orderId }: OrderReviewModalP
               <X className="h-6 w-6" />
             </button>
           </div>
-          <p className="text-gray-600 mt-2">Help us improve by rating the items you ordered</p>
+          <p className="text-gray-600 mt-2">{t('review.subtitle')}</p>
         </div>
 
         <div className="p-6 overflow-y-auto max-h-[60vh]">
@@ -107,7 +109,7 @@ export function OrderReviewModal({ isOpen, onClose, orderId }: OrderReviewModalP
                       <h3 className="font-semibold text-gray-900 mb-2">{item.name}</h3>
                       
                       <div className="mb-3">
-                        <p className="text-sm text-gray-600 mb-2">Rate this item:</p>
+                        <p className="text-sm text-gray-600 mb-2">{t('review.rateItem')}</p>
                         <div className="flex space-x-1">
                           {renderStars(item.id, currentReview.rating)}
                         </div>
@@ -115,12 +117,12 @@ export function OrderReviewModal({ isOpen, onClose, orderId }: OrderReviewModalP
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Comments (optional):
+                          {t('review.comments')}:
                         </label>
                         <textarea
                           value={currentReview.comment}
                           onChange={(e) => handleCommentChange(item.id, e.target.value)}
-                          placeholder="Tell us what you thought about this item..."
+                          placeholder={t('review.commentsPlaceholder')}
                           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                           rows={2}
                         />
@@ -139,13 +141,13 @@ export function OrderReviewModal({ isOpen, onClose, orderId }: OrderReviewModalP
               onClick={onClose}
               className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-4 rounded-lg transition-colors"
             >
-              Skip Reviews
+              {t('review.skipReviews')}
             </button>
             <button
               onClick={handleSubmitReviews}
               className="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
             >
-              Submit Reviews
+              {t('review.submitReviews')}
             </button>
           </div>
         </div>

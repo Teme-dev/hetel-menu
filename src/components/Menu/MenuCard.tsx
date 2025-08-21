@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Star, Clock } from 'lucide-react';
 import { MenuItem } from '../../types';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface MenuCardProps {
   item: MenuItem;
@@ -8,6 +9,7 @@ interface MenuCardProps {
 }
 
 export function MenuCard({ item, onAddToCart }: MenuCardProps) {
+  const { t } = useLanguage();
   const [quantity, setQuantity] = useState(1);
   const [notes, setNotes] = useState('');
   const [showDetails, setShowDetails] = useState(false);
@@ -57,7 +59,7 @@ export function MenuCard({ item, onAddToCart }: MenuCardProps) {
         
         <div className="flex items-center text-gray-500 text-sm mb-4">
           <Clock className="h-4 w-4 mr-1" />
-          <span>{item.prepTime} min prep time</span>
+          <span>{item.prepTime} {t('menu.prepTime')}</span>
         </div>
 
         {item.available && (
@@ -68,12 +70,12 @@ export function MenuCard({ item, onAddToCart }: MenuCardProps) {
                 className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
               >
                 <Plus className="h-5 w-5 mr-2" />
-                Add to Cart
+                {t('menu.addToCart')}
               </button>
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-gray-700">Quantity:</label>
+                  <label className="text-sm font-medium text-gray-700">{t('menu.quantity')}:</label>
                   <select
                     value={quantity}
                     onChange={(e) => setQuantity(Number(e.target.value))}
@@ -89,12 +91,12 @@ export function MenuCard({ item, onAddToCart }: MenuCardProps) {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Special Notes:
+                    {t('menu.specialNotes')}:
                   </label>
                   <textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Any special requests or dietary restrictions..."
+                    placeholder={t('menu.specialNotesPlaceholder')}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     rows={2}
                   />
@@ -105,20 +107,20 @@ export function MenuCard({ item, onAddToCart }: MenuCardProps) {
                     onClick={() => setShowDetails(false)}
                     className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors"
                   >
-                    Cancel
+                    {t('menu.cancel')}
                   </button>
                   <button
                     onClick={handleAddToCart}
                     className="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
                   >
                     Add ${(item.price * quantity).toFixed(2)}
-                  </button>
-                </div>
-              </div>
+              <span className="bg-red-600 text-white px-2 py-1 rounded-full text-xs font-medium">
+                {t('menu.specials')}
+              </span>
             )}
           </div>
         )}
       </div>
     </div>
-  );
+            <span className="text-white font-semibold">{t('menu.unavailable')}</span>
 }

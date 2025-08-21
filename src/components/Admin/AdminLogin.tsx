@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Lock, User, X } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { loadAdmins } from '../../utils/storage';
 
 interface AdminLoginProps {
@@ -9,6 +10,7 @@ interface AdminLoginProps {
 }
 
 export function AdminLogin({ isOpen, onClose }: AdminLoginProps) {
+  const { t } = useLanguage();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,7 +29,7 @@ export function AdminLogin({ isOpen, onClose }: AdminLoginProps) {
       setPassword('');
       onClose();
     } else {
-      setError('Invalid username or password');
+      setError(t('admin.invalidCredentials'));
     }
   };
 
@@ -40,7 +42,7 @@ export function AdminLogin({ isOpen, onClose }: AdminLoginProps) {
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center">
               <Lock className="h-6 w-6 mr-2" />
-              Admin Login
+              {t('admin.login')}
             </h2>
             <button
               onClick={onClose}
@@ -61,7 +63,7 @@ export function AdminLogin({ isOpen, onClose }: AdminLoginProps) {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <User className="h-4 w-4 inline mr-1" />
-              Username
+              {t('admin.username')}
             </label>
             <input
               type="text"
@@ -69,14 +71,14 @@ export function AdminLogin({ isOpen, onClose }: AdminLoginProps) {
               onChange={(e) => setUsername(e.target.value)}
               required
               className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-              placeholder="Enter your username"
+              placeholder={t('admin.usernamePlaceholder')}
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <Lock className="h-4 w-4 inline mr-1" />
-              Password
+              {t('admin.password')}
             </label>
             <input
               type="password"
@@ -84,7 +86,7 @@ export function AdminLogin({ isOpen, onClose }: AdminLoginProps) {
               onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-              placeholder="Enter your password"
+              placeholder={t('admin.passwordPlaceholder')}
             />
           </div>
 
@@ -93,11 +95,11 @@ export function AdminLogin({ isOpen, onClose }: AdminLoginProps) {
               type="submit"
               className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
             >
-              Login
+              {t('admin.loginButton')}
             </button>
             
             <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-              <p className="font-medium mb-1">Demo Credentials:</p>
+              <p className="font-medium mb-1">{t('admin.demoCredentials')}</p>
               <p>Username: <code className="bg-white px-1 rounded">admin</code> Password: <code className="bg-white px-1 rounded">admin123</code></p>
               <p>Username: <code className="bg-white px-1 rounded">chef</code> Password: <code className="bg-white px-1 rounded">chef123</code></p>
             </div>

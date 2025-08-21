@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Minus, Plus, ShoppingBag, MapPin, Phone } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { Order } from '../../types';
 import { OrderReviewModal } from './OrderReviewModal';
 
@@ -11,6 +12,7 @@ interface CartProps {
 
 export function Cart({ isOpen, onClose }: CartProps) {
   const { state, dispatch } = useApp();
+  const { t } = useLanguage();
   const [customerInfo, setCustomerInfo] = useState({
     tableNumber: '',
     roomNumber: '',
@@ -48,7 +50,7 @@ export function Cart({ isOpen, onClose }: CartProps) {
     setShowOrderForm(false);
     
     // Show success message
-    alert('Order placed successfully! You will receive updates on the status.');
+    alert(t('cart.orderSuccess'));
     
     // Check if order is completed to show review modal
     setTimeout(() => {
@@ -70,7 +72,7 @@ export function Cart({ isOpen, onClose }: CartProps) {
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center">
               <ShoppingBag className="h-6 w-6 mr-2" />
-              Your Order
+              {t('cart.title')}
             </h2>
             <button
               onClick={onClose}
@@ -85,8 +87,8 @@ export function Cart({ isOpen, onClose }: CartProps) {
           {state.cartItems.length === 0 ? (
             <div className="text-center py-8">
               <ShoppingBag className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 text-lg">Your cart is empty</p>
-              <p className="text-gray-400">Add some delicious items from our menu!</p>
+              <p className="text-gray-500 text-lg">{t('cart.empty')}</p>
+              <p className="text-gray-400">{t('cart.emptySubtitle')}</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -99,9 +101,9 @@ export function Cart({ isOpen, onClose }: CartProps) {
                   />
                   <div className="flex-1">
                     <h3 className="font-semibold text-gray-900">{item.name}</h3>
-                    <p className="text-gray-600 text-sm">${item.price.toFixed(2)} each</p>
+                    <p className="text-gray-600 text-sm">${item.price.toFixed(2)} {t('cart.each')}</p>
                     {item.notes && (
-                      <p className="text-gray-500 text-xs mt-1">Note: {item.notes}</p>
+                      <p className="text-gray-500 text-xs mt-1">{t('cart.note')}: {item.notes}</p>
                     )}
                   </div>
                   <div className="flex items-center space-x-2">
@@ -131,8 +133,8 @@ export function Cart({ isOpen, onClose }: CartProps) {
         {state.cartItems.length > 0 && (
           <div className="p-6 border-t border-gray-200">
             <div className="flex justify-between items-center mb-4">
-              <span className="text-xl font-semibold">Total: ${total.toFixed(2)}</span>
-              <span className="text-gray-500">Est. {totalPrepTime} min</span>
+              <span className="text-xl font-semibold">{t('cart.total')}: ${total.toFixed(2)}</span>
+              <span className="text-gray-500">{t('common.est')} {totalPrepTime} {t('orders.min')}</span>
             </div>
 
             {!showOrderForm ? (
@@ -140,34 +142,34 @@ export function Cart({ isOpen, onClose }: CartProps) {
                 onClick={() => setShowOrderForm(true)}
                 className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
               >
-                Proceed to Order
+                {t('cart.proceedToOrder')}
               </button>
             ) : (
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       <MapPin className="h-4 w-4 inline mr-1" />
-                      Table Number
+                      {t('cart.tableNumber')}
                     </label>
                     <input
                       type="text"
                       value={customerInfo.tableNumber}
                       onChange={(e) => setCustomerInfo({ ...customerInfo, tableNumber: e.target.value })}
-                      placeholder="e.g., Table 12"
+                      placeholder={t('cart.tableNumberPlaceholder')}
                       className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       <MapPin className="h-4 w-4 inline mr-1" />
-                      Room Number
+                      {t('cart.roomNumber')}
                     </label>
                     <input
                       type="text"
                       value={customerInfo.roomNumber}
                       onChange={(e) => setCustomerInfo({ ...customerInfo, roomNumber: e.target.value })}
-                      placeholder="e.g., Room 305"
+                      placeholder={t('cart.roomNumberPlaceholder')}
                       className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     />
                   </div>
@@ -175,13 +177,13 @@ export function Cart({ isOpen, onClose }: CartProps) {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     <Phone className="h-4 w-4 inline mr-1" />
-                    Contact Information
+                    {t('cart.contactInfo')}
                   </label>
                   <input
                     type="text"
                     value={customerInfo.contactInfo}
                     onChange={(e) => setCustomerInfo({ ...customerInfo, contactInfo: e.target.value })}
-                    placeholder="Phone number or room extension"
+                    placeholder={t('cart.contactInfoPlaceholder')}
                     className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                   />
                 </div>
@@ -190,13 +192,13 @@ export function Cart({ isOpen, onClose }: CartProps) {
                     onClick={() => setShowOrderForm(false)}
                     className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-4 rounded-lg transition-colors"
                   >
-                    Back
+                    {t('cart.back')}
                   </button>
                   <button
                     onClick={placeOrder}
                     className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
                   >
-                    Place Order
+                    {t('cart.placeOrder')}
                   </button>
                 </div>
               </div>
